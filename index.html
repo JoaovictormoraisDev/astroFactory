@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SSR AstroFactory — central inteligente de operações industriais">
+  <title>SSR AstroFactory — Mission Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme-light.css">
+  <link rel="stylesheet" href="theme-red.css">
+  <style>#area stop:first-child{stop-color:#dc2626;stop-opacity:.28}#area stop:last-child{stop-color:#dc2626}</style>
+</head>
+<body>
+  <a class="skip" href="#main">Pular para o painel</a>
+  <div class="noise" aria-hidden="true"></div>
+  <aside class="rail">
+    <a class="mark" href="#overview" aria-label="SSR AstroFactory, início"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 42 14v20L24 44 6 34V14Z"/><circle cx="24" cy="24" r="7"/><path d="M24 4v13M42 14l-12 7M42 34l-12-7M24 44V31M6 34l12-7M6 14l12 7"/></svg></a>
+    <nav aria-label="Navegação principal">
+      <a class="active" href="#overview" data-label="Visão geral">⌁</a>
+      <a href="#fleet" data-label="Frota industrial">◇</a>
+      <a href="#telemetry" data-label="Telemetria">⌇</a>
+      <a href="#new-machine" data-label="Cadastrar máquina">＋</a>
+    </nav>
+    <button class="theme-dot" type="button" aria-label="Alternar intensidade visual">◐</button>
+    <div class="avatar" title="João Morais">JM</div>
+  </aside>
+
+  <main id="main">
+    <header class="topline">
+      <a class="wordmark" href="#overview">SSR <span>ASTROFACTORY</span></a>
+      <div class="system"><i></i><span>SISTEMA OPERACIONAL</span><b>12:48:09</b></div>
+      <button class="command" type="button"><kbd>⌘</kbd> Central de comando <kbd>K</kbd></button>
+    </header>
+
+    <section class="hero reveal" id="overview">
+      <div class="hero-copy">
+        <p class="overline">MISSÃO 07 / TURNO ALPHA</p>
+        <h1>Produção em<br><span>órbita perfeita.</span></h1>
+        <p class="intro">Uma visão viva de cada máquina, recurso e pulso da operação industrial.</p>
+        <div class="hero-actions"><a class="primary" href="#fleet">Explorar operação <span>↗</span></a><button class="play" type="button"><i>▶</i> Ver resumo do turno</button></div>
+      </div>
+      <div class="orbit" aria-label="Eficiência geral: 94,8 por cento">
+        <div class="orbit-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="core"><small>EFICIÊNCIA GERAL</small><strong data-count="94.8">0</strong><em>%</em><span>+ 6,4% este mês</span></div>
+        <div class="satellite sat-a"><i></i><span>ENERGIA</span><b>620 kWh</b></div>
+        <div class="satellite sat-b"><i></i><span>UPTIME</span><b>18h 42m</b></div>
+        <svg class="orbit-svg" viewBox="0 0 500 500" aria-hidden="true"><circle cx="250" cy="250" r="184"/><circle class="progress-ring" cx="250" cy="250" r="184"/></svg>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="Informações em tempo real"><div><span>SSR LIVE FEED</span><b>24 MÁQUINAS CONECTADAS</b><i>◆</i><b>19 EM OPERAÇÃO</b><i>◆</i><b>ZERO INCIDENTES CRÍTICOS</b><i>◆</i><b>1.248 UNIDADES PRODUZIDAS</b><i>◆</i></div></section>
+
+    <section class="operations reveal" id="fleet">
+      <div class="section-head"><div><p class="overline">MAPA OPERACIONAL</p><h2>Chão de fábrica</h2></div><div class="legend"><span><i class="ok"></i>Operando</span><span><i class="warn"></i>Atenção</span><span><i class="off"></i>Offline</span></div></div>
+      <div class="ops-grid">
+        <article class="factory-card">
+          <div class="factory-top"><span>LINHA ORBITAL / A</span><b>96% CAPACIDADE</b></div>
+          <div class="production-line">
+            <div class="line-path"></div>
+            <button class="machine active" style="--x:9%;--y:50%" type="button"><i></i><span>CNC-01</span><small>42°C</small></button>
+            <button class="machine active" style="--x:34%;--y:22%" type="button"><i></i><span>ROB-08</span><small>38°C</small></button>
+            <button class="machine warning" style="--x:58%;--y:62%" type="button"><i></i><span>PRS-02</span><small>76°C</small></button>
+            <button class="machine active" style="--x:80%;--y:25%" type="button"><i></i><span>EST-04</span><small>35°C</small></button>
+            <div class="pulse" aria-hidden="true"></div>
+          </div>
+          <div class="factory-bottom"><span>ENTRADA <b>1.492</b></span><span>PERDAS <b>1,2%</b></span><span>SAÍDA <b>1.248</b></span></div>
+        </article>
+        <article class="signal-card">
+          <div class="card-label"><span>SINAL CRÍTICO</span><i>02</i></div>
+          <div class="temperature"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50"/><circle class="temp-progress" cx="60" cy="60" r="50"/></svg><div><strong>76</strong><em>°C</em><small>PRENSA 02</small></div></div>
+          <h3>Temperatura acima da faixa ideal.</h3><p>Inspeção preventiva recomendada nos próximos 30 minutos.</p><button type="button">Abrir diagnóstico <span>→</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="telemetry reveal" id="telemetry">
+      <div class="section-head"><div><p class="overline">TELEMETRIA / ÚLTIMAS 12H</p><h2>Ritmo da operação</h2></div><select aria-label="Selecionar métrica"><option>Produção por hora</option><option>Consumo energético</option></select></div>
+      <div class="chart-card">
+        <div class="chart-stats"><div><small>PRODUÇÃO ATUAL</small><strong>184 <em>un/h</em></strong></div><div><small>PICO DO TURNO</small><strong>218 <em>un/h</em></strong></div><div><small>VARIAÇÃO</small><strong class="acid">+12,6%</strong></div></div>
+        <svg class="line-chart" viewBox="0 0 1000 280" preserveAspectRatio="none" role="img" aria-label="Produção crescente ao longo do turno"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8ff45" stop-opacity=".25"/><stop offset="1" stop-color="#c8ff45" stop-opacity="0"/></linearGradient></defs><path class="gridline" d="M0 55H1000M0 125H1000M0 195H1000M100 0V250M300 0V250M500 0V250M700 0V250M900 0V250"/><path class="area" d="M0 220 C80 210 100 185 170 190 S260 125 330 160 S430 115 500 130 S590 75 670 100 S770 50 830 72 S930 22 1000 35 V280H0Z"/><path class="stroke" d="M0 220 C80 210 100 185 170 190 S260 125 330 160 S430 115 500 130 S590 75 670 100 S770 50 830 72 S930 22 1000 35"/></svg>
+        <div class="axis"><span>01:00</span><span>03:00</span><span>05:00</span><span>07:00</span><span>09:00</span><span>11:00</span></div>
+      </div>
+    </section>
+
+    <section class="new-machine reveal" id="new-machine">
+      <div><p class="overline">EXPANDIR FROTA</p><h2>Conectar nova máquina</h2><p>Adicione um equipamento à malha inteligente da AstroFactory.</p></div>
+      <form><label><span>IDENTIFICAÇÃO</span><input required placeholder="Ex.: CNC Orion 04"></label><label><span>SETOR</span><select required><option value="">Selecionar</option><option>Usinagem</option><option>Montagem</option><option>Expedição</option></select></label><label><span>TIPO</span><input required placeholder="Ex.: Torno CNC"></label><label><span>STATUS INICIAL</span><select><option>Em operação</option><option>Em manutenção</option><option>Parada</option><option>Desativada</option></select></label><label><span>CONSUMO MÉDIO</span><input type="number" min="0" placeholder="kWh"></label><label><span>TEMPERATURA</span><input type="number" placeholder="°C"></label><button type="submit">Conectar à rede <span>↗</span></button></form>
+    </section>
+    <footer><span>SSR ASTROFACTORY © 2026</span><span>INDÚSTRIA INTELIGENTE / MISSÃO CONTÍNUA</span><a href="#overview">VOLTAR AO TOPO ↑</a></footer>
+  </main>
+  <div class="command-panel" aria-hidden="true"><div><span>COMANDO RÁPIDO</span><button aria-label="Fechar">×</button></div><input placeholder="Digite uma ação ou procure uma máquina..."><p><kbd>ESC</kbd> para fechar</p></div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
