@@ -1,34 +1,111 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
-
 gsap.registerPlugin(ScrollTrigger);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const host = document.querySelector('#factory-scene');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(34, host.clientWidth / host.clientHeight, .1, 100);
-camera.position.set(6, 5, 8); camera.lookAt(0, 0, 0);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(host.clientWidth, host.clientHeight); renderer.shadowMap.enabled = true; host.appendChild(renderer.domElement);
-
-scene.add(new THREE.HemisphereLight(0xffffff, 0x675d4d, 2.3));
-const key = new THREE.DirectionalLight(0xffffff, 3); key.position.set(4, 7, 5); key.castShadow = true; scene.add(key);
-const group = new THREE.Group(); scene.add(group);
-const mat = (color, rough=.55) => new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: .05 });
-const floor = new THREE.Mesh(new THREE.CylinderGeometry(3.7, 3.7, .18, 64), mat(0xd9d3c6)); floor.position.y = -1.25; floor.receiveShadow = true; group.add(floor);
-const addBox = (x,y,z,w,h,d,color) => { const mesh = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color)); mesh.position.set(x,y,z); mesh.castShadow=true; mesh.receiveShadow=true; group.add(mesh); return mesh; };
-addBox(-1.3,-.5,0,1.4,1.35,1.5,0x3157e1); addBox(.5,-.72,.2,1.7,.9,1.2,0xff735f); addBox(1.45,-.5,-1.1,.9,1.35,.9,0x2b8c69); addBox(-.15,-.9,-1.55,2.2,.5,.65,0xffd75e);
-for(let i=0;i<4;i++){ const pipe=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,1.8,16),mat(0x24231f,.25)); pipe.position.set(-1.65+i*.35,.65,0); pipe.castShadow=true; group.add(pipe); }
-const ring = new THREE.Mesh(new THREE.TorusGeometry(2.55,.025,12,100),mat(0x3157e1,.2)); ring.rotation.x=Math.PI/2; ring.position.y=.25; group.add(ring);
-for(let i=0;i<18;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.035,10,10),mat(i%3===0?0xff735f:0x3157e1));const a=i/18*Math.PI*2;dot.position.set(Math.cos(a)*2.55,.25,Math.sin(a)*2.55);group.add(dot)}
-
-let targetX=.18,targetY=-.35,drag=false,lastX=0;
-renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;renderer.domElement.setPointerCapture(e.pointerId)});
-renderer.domElement.addEventListener('pointermove',e=>{if(drag){targetY+=(e.clientX-lastX)*.008;lastX=e.clientX}});
-renderer.domElement.addEventListener('pointerup',()=>drag=false);
-function render(){ if(!drag&&!reduced) targetY+=.002; group.rotation.y+=(targetY-group.rotation.y)*.05;group.rotation.x+=(targetX-group.rotation.x)*.05; renderer.render(scene,camera);requestAnimationFrame(render)}render();
-addEventListener('resize',()=>{camera.aspect=host.clientWidth/host.clientHeight;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight)});
 
 if(!reduced){gsap.timeline({defaults:{ease:'power3.out'}}).from('.nav>*',{y:-15,opacity:0,stagger:.08}).from('.hero-copy>*',{y:30,opacity:0,stagger:.09,duration:.7},'-.2').from('.scene-wrap',{scale:.88,opacity:0,duration:1},'-.7').from('.scene-label',{scale:.7,opacity:0,stagger:.12},'-.3');document.querySelectorAll('.section').forEach(s=>gsap.from(s.children,{scrollTrigger:{trigger:s,start:'top 78%'},y:45,opacity:0,stagger:.12,duration:.75,ease:'power3.out'}));gsap.to('.flower',{rotation:360,duration:24,repeat:-1,ease:'none'});gsap.to('.rings',{rotation:-360,duration:35,repeat:-1,ease:'none'});}
 gsap.to({n:0},{n:1248,duration:reduced?0:1.7,delay:.7,ease:'power2.out',onUpdate(){document.querySelector('[data-value]').textContent=Math.round(this.targets()[0].n).toLocaleString('pt-BR')}});
 addEventListener('pointermove',e=>gsap.to('.cursor-glow',{x:e.clientX,y:e.clientY,duration:.6}));
-document.querySelector('form').addEventListener('submit',e=>{e.preventDefault();gsap.fromTo('.toast',{y:90},{y:0,duration:.45,ease:'back.out(1.6)',onComplete:()=>gsap.to('.toast',{y:90,delay:2.3})});});
+const API_URL = '/api';
+const machineForm = document.querySelector('#machine-form');
+const machineCard = document.querySelector('.machine-list');
+const formStatus = machineForm.querySelector('.form-status');
+const toast = document.querySelector('.toast');
+
+function apiError(data, fallback) {
+  if (Array.isArray(data?.detalhes) && data.detalhes.length) return data.detalhes.join('. ');
+  return data?.erro || fallback;
+}
+
+async function request(path, options) {
+  const response = await fetch(`${API_URL}${path}`, options);
+  const data = response.status === 204 ? null : await response.json().catch(() => null);
+  if (!response.ok) throw new Error(apiError(data, `Erro HTTP ${response.status}`));
+  return data;
+}
+
+function showToast(message, failed = false) {
+  toast.textContent = message;
+  toast.classList.toggle('error', failed);
+  gsap.killTweensOf(toast);
+  gsap.fromTo(toast, { y: 90 }, { y: 0, duration: .45, ease: 'back.out(1.6)', onComplete: () => gsap.to(toast, { y: 90, delay: 2.8 }) });
+}
+
+function renderMachines(machines) {
+  machineCard.querySelectorAll('.machine-row, .api-message').forEach(element => element.remove());
+  machineCard.setAttribute('aria-busy', 'false');
+  if (!machines.length) {
+    const empty = document.createElement('p');
+    empty.className = 'api-message';
+    empty.textContent = 'Nenhuma máquina cadastrada no banco de dados.';
+    machineCard.append(empty);
+    return;
+  }
+  machines.slice(0, 6).forEach((machine, index) => {
+    const row = document.createElement('div');
+    row.className = 'machine-row';
+    const icon = document.createElement('span');
+    icon.className = `machine-icon ${['cobalt', 'coral', 'green'][index % 3]}`;
+    icon.textContent = machine.nome.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase();
+    const description = document.createElement('p');
+    const name = document.createElement('b');
+    const details = document.createElement('small');
+    name.textContent = machine.nome;
+    details.textContent = `${machine.setor} · ${machine.tipo}`;
+    description.append(name, details);
+    const status = document.createElement('em');
+    status.className = machine.status === 'Em operação' ? 'online' : 'attention';
+    status.textContent = machine.status;
+    const temperature = document.createElement('strong');
+    temperature.textContent = machine.temperatura == null ? '—' : `${Number(machine.temperatura).toLocaleString('pt-BR')}°C`;
+    row.append(icon, description, status, temperature);
+    machineCard.append(row);
+  });
+  const health = machines.filter(machine => machine.status === 'Em operação').length / machines.length * 100;
+  document.querySelector('.label-a b').textContent = `${health.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%`;
+}
+
+async function loadMachines() {
+  machineCard.setAttribute('aria-busy', 'true');
+  try {
+    renderMachines(await request('/maquinas'));
+  } catch (error) {
+    machineCard.setAttribute('aria-busy', 'false');
+    machineCard.querySelectorAll('.machine-row, .api-message').forEach(element => element.remove());
+    const message = document.createElement('p');
+    message.className = 'api-message error';
+    message.textContent = `Não foi possível carregar as máquinas: ${error.message}`;
+    machineCard.append(message);
+  }
+}
+
+machineForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = machineForm.querySelector('button[type="submit"]');
+  const values = Object.fromEntries(new FormData(machineForm));
+  const payload = { ...values, consumo_energia: values.consumo_energia || 0, temperatura: values.temperatura || null };
+  button.disabled = true;
+  button.textContent = 'Conectando...';
+  formStatus.className = 'form-status loading';
+  formStatus.textContent = 'Salvando no banco de dados...';
+  try {
+    const machine = await request('/maquinas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    machineForm.reset();
+    machineForm.elements.consumo_energia.value = '0';
+    formStatus.className = 'form-status success';
+    formStatus.textContent = `${machine.nome} foi cadastrada e persistida com sucesso.`;
+    showToast('Máquina conectada com sucesso ✓');
+    await loadMachines();
+  } catch (error) {
+    formStatus.className = 'form-status error';
+    formStatus.textContent = `Falha ao cadastrar: ${error.message}`;
+    showToast('Não foi possível conectar a máquina', true);
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Conectar máquina <span>↗</span>';
+  }
+});
+
+loadMachines();

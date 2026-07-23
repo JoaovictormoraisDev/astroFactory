@@ -1,6 +1,6 @@
 # Projeto João — SSR AstroFactory
 
-Aplicação de monitoramento industrial organizada como entrega dos encontros 6 e 7.
+Aplicação de monitoramento industrial organizada como entrega dos encontros 6, 7 e 8.
 
 ## Estrutura
 
@@ -13,10 +13,10 @@ Aplicação de monitoramento industrial organizada como entrega dos encontros 6 
 ## Como executar
 
 1. Instale Node.js 18+ e MySQL 8+.
-2. Execute `mysql -u root -p < database/schema.sql`.
-3. Opcional: execute `mysql -u root -p astrofactory_joao < database/seed.sql`.
+2. Crie o banco e as tabelas: `mysql -u root -p < database/schema.sql`.
+3. Opcional: carregue exemplos com `mysql -u root -p astrofactory_joao < database/seed.sql`.
 4. Copie `.env.example` para `.env` e ajuste usuário e senha do MySQL.
-5. Execute `npm install` e `node server.js`.
+5. Execute `npm install` e `npm start`.
 
 Também é possível usar `npm start` ou `npm run dev`.
 
@@ -31,9 +31,12 @@ Também é possível usar `npm start` ou `npm run dev`.
 | PUT | `/api/maquinas/:id` | Atualizar máquina |
 | DELETE | `/api/maquinas/:id` | Excluir máquina |
 | GET | `/api/producoes` | Listar produções com produtividade |
+| GET | `/api/producoes/:id` | Consultar produção |
 | POST | `/api/producoes` | Cadastrar produção |
+| PUT | `/api/producoes/:id` | Atualizar produção |
+| DELETE | `/api/producoes/:id` | Excluir produção |
 
-A integração da interface com esta API pertence ao encontro 8.
+O Front-End consome a API, lista dados persistidos e cadastra máquinas com feedback de carregamento, sucesso e erro.
 
 A API utiliza `http://localhost:3002/api` para não conflitar com servidores de arquivos do VS Code.
 O site completo fica disponível em `http://localhost:3002`.

@@ -21,7 +21,10 @@ app.get('/api', (req, res) => res.json({
     atualizar_maquina: 'PUT /api/maquinas/:id',
     excluir_maquina: 'DELETE /api/maquinas/:id',
     listar_producoes: 'GET /api/producoes',
+    consultar_producao: 'GET /api/producoes/:id',
     cadastrar_producao: 'POST /api/producoes',
+    atualizar_producao: 'PUT /api/producoes/:id',
+    excluir_producao: 'DELETE /api/producoes/:id',
   },
 }));
 app.get('/api/saude', (req, res) => res.json({ situacao: 'funcionando' }));

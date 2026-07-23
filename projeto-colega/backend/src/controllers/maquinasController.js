@@ -31,7 +31,8 @@ async function criar(req, res, next) {
   const { nome, setor, tipo, status, consumo_energia, temperatura } = req.body;
   try {
     const [result] = await pool.execute(
-      `INSERT INTO maquinas (nome,setor,tipo,status,consumo_energia,temperatura) VALUES (?,?,?,?,?,?)`,
+      `INSERT INTO maquinas (nome,setor,tipo,status,consumo_energia,temperatura)
+       VALUES (?,?,?,?,?,?)`,
       [nome.trim(), setor.trim(), tipo.trim(), status, Number(consumo_energia), temperatura === '' ? null : temperatura]
     );
     const [rows] = await pool.execute('SELECT * FROM maquinas WHERE id = ?', [result.insertId]);
@@ -45,7 +46,8 @@ async function atualizar(req, res, next) {
   const { nome, setor, tipo, status, consumo_energia, temperatura } = req.body;
   try {
     const [result] = await pool.execute(
-      `UPDATE maquinas SET nome=?,setor=?,tipo=?,status=?,consumo_energia=?,temperatura=? WHERE id=?`,
+      `UPDATE maquinas SET nome=?,setor=?,tipo=?,status=?,consumo_energia=?,
+       temperatura=? WHERE id=?`,
       [nome.trim(), setor.trim(), tipo.trim(), status, Number(consumo_energia), temperatura === '' ? null : temperatura, req.params.id]
     );
     if (!result.affectedRows) return res.status(404).json({ erro: 'Máquina não encontrada' });
