@@ -67,4 +67,4 @@ async function excluir(req, res, next) {
   }
 }
 
-module.exports = { listar, buscarPorId, criar, atualizar, excluir };
+module.exports = { validar, listar, buscarPorId, criar, atualizar, excluir };

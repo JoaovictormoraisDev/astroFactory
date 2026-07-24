@@ -7,7 +7,7 @@ const pastaDoProjeto = path.resolve(__dirname, '../..');
 app.use(cors());
 app.use(express.json());
 app.get('/', (req, res) => res.sendFile(path.join(pastaDoProjeto, 'index.html')));
-app.get(['/style.css', '/script.js'], (req, res) => {
+app.get(['/style.css', '/script.js', '/integracao.css', '/integracao.js'], (req, res) => {
   res.sendFile(path.join(pastaDoProjeto, path.basename(req.path)));
 });
 app.get('/api', (req, res) => res.json({
@@ -25,11 +25,14 @@ app.get('/api', (req, res) => res.json({
     cadastrar_producao: 'POST /api/producoes',
     atualizar_producao: 'PUT /api/producoes/:id',
     excluir_producao: 'DELETE /api/producoes/:id',
+    listar_ocorrencias: 'GET /api/ocorrencias',
+    cadastrar_ocorrencia: 'POST /api/ocorrencias',
   },
 }));
 app.get('/api/saude', (req, res) => res.json({ situacao: 'funcionando' }));
 app.use('/api/maquinas', require('./routes/maquinas'));
 app.use('/api/producoes', require('./routes/producoes'));
+app.use('/api/ocorrencias', require('./routes/ocorrencias'));
 app.use((req, res) => res.status(404).json({ erro: 'Rota não encontrada' }));
 app.use((error, req, res, next) => {
   console.error(error);

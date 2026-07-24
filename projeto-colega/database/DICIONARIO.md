@@ -21,5 +21,4 @@
 | ocorrencias | descricao | text | Obrigatório |
 | ocorrencias | nivel_risco | varchar | Baixo, Médio, Alto ou Crítico |
 | ocorrencias | data | date | Data da ocorrência |
-| ocorrencias | medida_preventiva | text | Opcional |
-
+| ocorrencias | medida_preventiva | text | Obrigatória |

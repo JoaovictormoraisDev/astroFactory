@@ -1,0 +1,21 @@
+.integration-hub{max-width:1280px;margin:0 auto;padding:80px 5%;font-family:inherit}
+.integration-hub h2{font-size:clamp(2rem,4vw,4rem);margin:0 0 12px}
+.integration-hub>p{opacity:.72;margin-bottom:32px}
+.live-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 40px}
+.live-metrics article,.data-panel{background:rgba(127,127,127,.08);border:1px solid rgba(127,127,127,.25);border-radius:18px;padding:20px}
+.live-metrics span{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.7}
+.live-metrics strong{display:block;font-size:2rem;margin-top:8px}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.data-panel.full{grid-column:1/-1}
+.data-panel h3{font-size:1.25rem;margin:0 0 16px}
+.compact-form{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.compact-form label{display:flex;flex-direction:column;gap:6px;font-size:.78rem}
+.compact-form input,.compact-form select,.compact-form textarea{width:100%;box-sizing:border-box;padding:11px;border:1px solid rgba(127,127,127,.35);border-radius:9px;background:rgba(127,127,127,.08);color:inherit;font:inherit}
+.compact-form textarea{min-height:76px;resize:vertical}.compact-form .wide{grid-column:1/-1}
+.compact-form button,.row-actions button{border:0;border-radius:9px;padding:11px 16px;cursor:pointer;font-weight:700}
+.compact-form button{background:#77b900;color:#081000}.form-feedback{grid-column:1/-1;min-height:1.2em;margin:0}
+.table-wrap{overflow-x:auto}.data-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.data-table th,.data-table td{text-align:left;padding:10px 8px;border-bottom:1px solid rgba(127,127,127,.2)}
+.row-actions{display:flex;gap:6px}.row-actions button{padding:6px 9px}.row-actions .danger{background:#c43d3d;color:white}
+.risk{font-weight:700}.risk-Crítico,.risk-Alto{color:#e65b5b}.risk-Médio{color:#d89a2b}.risk-Baixo{color:#55aa72}
+@media(max-width:800px){.live-metrics{grid-template-columns:1fr 1fr}.data-grid{grid-template-columns:1fr}.data-panel.full{grid-column:auto}.compact-form{grid-template-columns:1fr}.compact-form .wide{grid-column:auto}}

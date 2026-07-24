@@ -8,3 +8,5 @@ INSERT INTO producoes (produto, quantidade_produzida, quantidade_esperada, data,
 SELECT 'Peça industrial A', 850, 1000, CURRENT_DATE, id
 FROM maquinas WHERE nome = 'Torno CNC 01';
 
+INSERT INTO ocorrencias (tipo, descricao, nivel_risco, local, data, medida_preventiva)
+VALUES ('Vazamento de óleo', 'Óleo identificado próximo ao equipamento', 'Alto', 'Prensagem', CURRENT_DATE, 'Isolar o local, conter o vazamento e inspecionar a prensa');

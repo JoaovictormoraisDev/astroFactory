@@ -8,3 +8,5 @@ INSERT INTO producoes (produto, quantidade_produzida, quantidade_esperada, data,
 SELECT 'Componente orbital', 850, 1000, CURRENT_DATE, id
 FROM maquinas WHERE nome = 'CNC Orion 01';
 
+INSERT INTO ocorrencias (tipo, descricao, nivel_risco, local, data, medida_preventiva)
+VALUES ('Superaquecimento', 'Temperatura acima da faixa recomendada', 'Alto', 'Prensagem', CURRENT_DATE, 'Isolar a prensa e realizar inspeção preventiva');
